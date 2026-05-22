@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-teal: #0EBFA6;
+  --color-teal-dark: #0a9e8a;
+  --color-surface: #1A1B1E;
+  --color-dark: #121316;
+  --color-dark-alt: #0f1013;
+  --color-text-secondary: #BBCAC5;
+}
+
+body {
+  @apply bg-dark text-white antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
