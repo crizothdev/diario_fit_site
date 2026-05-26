@@ -14,5 +14,5 @@ export default defineConfig({
       },
     },
   ],
-  base: '/diario_fit_site/',
+  base: '/',
 })
