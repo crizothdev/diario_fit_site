@@ -6,7 +6,7 @@ import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename="/diario_fit_site">
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>,
