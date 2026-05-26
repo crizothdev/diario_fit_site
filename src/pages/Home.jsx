@@ -41,42 +41,45 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="pt-20 pb-12 md:pt-28 md:pb-20 px-6">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-teal/10 border border-teal/20 rounded-full px-4 py-1.5 text-teal text-sm font-medium mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
-              Disponível na Play Store
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-              Seu diário fitness{' '}
-              <span className="text-teal">gamificado</span>
-            </h1>
-            <p className="text-lg text-text-secondary leading-relaxed mb-8">
-              Controle seus treinos, alimentação e evolução em um só lugar.
-              Ganhe conquistas, medalhas e suba de nível enquanto mantém sua rotina.
-            </p>
-            <a
-              href="https://play.google.com/store/apps/details?id=com.crizoth.diario_fit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-teal hover:bg-teal-dark text-black font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M3 20.4V3.6c0-.9.9-1.4 1.7-.9l14.4 8.4c.7.4.7 1.4 0 1.8L4.7 21.3c-.8.5-1.7 0-1.7-.9z"/>
-              </svg>
-              Baixar na Play Store
-            </a>
+      {/* Hero Image */}
+      <section className="pt-16">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-teal/10 via-transparent to-dark pointer-events-none" />
+          <img
+            src={resourceImg}
+            alt="Diário Fit"
+            className="w-full max-h-[60vh] object-cover object-top"
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent" />
+        </div>
+      </section>
+
+      {/* Hero Text */}
+      <section className="px-6 pb-12 md:pb-20 -mt-16 relative z-10">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-teal/10 border border-teal/20 rounded-full px-4 py-1.5 text-teal text-sm font-medium mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
+            Disponível na Play Store
           </div>
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-tr from-teal/20 via-transparent to-teal/5 rounded-3xl blur-3xl" />
-            <img
-              src={resourceImg}
-              alt="Diário Fit"
-              className="relative w-full max-w-md mx-auto rounded-2xl shadow-2xl shadow-teal/10 ring-1 ring-white/10"
-            />
-          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
+            Seu diário fitness{' '}
+            <span className="text-teal">gamificado</span>
+          </h1>
+          <p className="text-lg text-text-secondary leading-relaxed mb-8">
+            Controle seus treinos, alimentação e evolução em um só lugar.
+            Ganhe conquistas, medalhas e suba de nível enquanto mantém sua rotina.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.crizoth.diario_fit"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-teal hover:bg-teal-dark text-black font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 20.4V3.6c0-.9.9-1.4 1.7-.9l14.4 8.4c.7.4.7 1.4 0 1.8L4.7 21.3c-.8.5-1.7 0-1.7-.9z"/>
+            </svg>
+            Baixar na Play Store
+          </a>
         </div>
       </section>
 
