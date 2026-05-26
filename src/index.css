@@ -13,3 +13,16 @@ body {
   @apply bg-dark text-white antialiased;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
+
+::selection {
+  @apply bg-teal/30 text-white;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
