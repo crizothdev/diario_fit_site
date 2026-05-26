@@ -61,10 +61,6 @@ export default function Home() {
             <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
             Disponível na Play Store
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-            Seu diário fitness{' '}
-            <span className="text-teal">gamificado</span>
-          </h1>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
             Controle seus treinos, alimentação e evolução em um só lugar.
             Ganhe conquistas, medalhas e suba de nível enquanto mantém sua rotina.
