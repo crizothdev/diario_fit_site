@@ -45,11 +45,11 @@ export default function Home() {
 
       {/* Hero Section */}
       <section
-        className="pt-32 min-h-[900px] flex items-center relative overflow-hidden bg-cover bg-top bg-no-repeat"
+        className="pt-32 min-h-[660px] flex items-center relative overflow-hidden bg-cover bg-top bg-no-repeat"
         style={{ backgroundImage: `url(${headerBgImg})` }}
       >
-        <div className="absolute inset-0 bg-surface-deep/60" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-surface-deep via-surface-deep/70 to-transparent" />
+        <div className="absolute inset-0 bg-surface-deep/40" />
+        <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-surface-deep via-surface-deep/80 to-transparent" />
         <div className="px-6 relative z-10">
           <div className="text-left ml-[20%]">
             <div className="inline-block px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-semibold text-xs tracking-widest uppercase font-label-caps">
