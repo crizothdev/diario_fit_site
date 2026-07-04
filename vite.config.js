@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { copyFileSync } from 'fs'
+import { copyFileSync, mkdirSync, existsSync } from 'fs'
 
 export default defineConfig({
   plugins: [
@@ -11,6 +11,13 @@ export default defineConfig({
       name: 'copy-404',
       closeBundle() {
         copyFileSync('dist/index.html', 'dist/404.html')
+
+        const routes = ['privacy', 'terms']
+        for (const route of routes) {
+          const dir = `dist/${route}`
+          if (!existsSync(dir)) mkdirSync(dir)
+          copyFileSync('dist/index.html', `${dir}/index.html`)
+        }
       },
     },
   ],
