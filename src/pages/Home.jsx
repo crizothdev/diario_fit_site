@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import headerBgImg from '../assets/header_bg.jpeg'
 import logoImg from '../assets/foreground.png'
@@ -10,8 +10,9 @@ const stats = [
   { icon: 'verified_user', value: '100%', label: 'Grátis Atletas' },
 ]
 
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
+
 export default function Home() {
-  const [showNotice, setShowNotice] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function Home() {
 
   const handlePlayStoreClick = (e) => {
     e.preventDefault()
-    setShowNotice(true)
+    window.open(PLAY_STORE_URL, '_blank', 'noopener')
   }
 
   return (
@@ -301,25 +302,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Custom Notice Modal */}
-      {showNotice && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-surface-deep/80 backdrop-blur-sm" onClick={() => setShowNotice(false)} />
-          <div className="relative z-10 bg-surface-container-high border border-white/10 rounded-3xl p-10 max-w-md w-full text-center shadow-2xl">
-            <span className="material-symbols-outlined text-5xl text-primary mb-4">rocket_launch</span>
-            <h3 className="text-xl font-bold text-on-surface mb-3">Em breve nas lojas!</h3>
-            <p className="text-on-surface-variant text-base mb-6">
-              Estamos em fase de testes. Logo estaremos disponível nas lojas Android.
-            </p>
-            <button
-              onClick={() => setShowNotice(false)}
-              className="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all w-full"
-            >
-              Entendi
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Empty spacer for removed modal */}
     </div>
   )
 }
