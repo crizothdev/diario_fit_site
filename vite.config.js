@@ -12,7 +12,7 @@ export default defineConfig({
       closeBundle() {
         copyFileSync('dist/index.html', 'dist/404.html')
 
-        const routes = ['privacy', 'terms']
+        const routes = ['privacy', 'terms', 'links']
         for (const route of routes) {
           const dir = `dist/${route}`
           if (!existsSync(dir)) mkdirSync(dir)
