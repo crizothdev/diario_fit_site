@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import headerBgImg from '../assets/header_bg.jpeg'
 import logoImg from '../assets/foreground.png'
+import bannerImg from '../assets/app_use_banner.png'
+
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
+const WHATSAPP_URL = 'https://wa.me/5512981539092'
+const PLANS_API = 'https://api-dev.diariofit.app.br/plan/active'
 
 const stats = [
   { icon: 'restaurant_menu', value: '189+', label: 'Alimentos TACO' },
@@ -9,6 +14,54 @@ const stats = [
   { icon: 'military_tech', value: '5', label: 'Níveis Ranking' },
   { icon: 'verified_user', value: '100%', label: 'Grátis Atletas' },
 ]
+
+const planTabs = [
+  { key: 'academy', label: 'Sou Academia', icon: 'fitness_center' },
+  { key: 'personal', label: 'Sou Personal Trainer', icon: 'person_pin_circle' },
+]
+
+const tabCopy = {
+  academy: {
+    title: 'Planos para Academias',
+    description:
+      'Gerencie alunos, professores, treinos e métricas da sua academia em uma única plataforma, do básico ao enterprise.',
+    badge: 'Mais escolhido',
+    highlight: 'Pro',
+  },
+  personal: {
+    title: 'Planos para Personal Trainers',
+    description:
+      'Organize seus alunos, monte treinos personalizados e acompanhe a evolução de cada atleta com simplicidade.',
+    badge: 'Para começar',
+    highlight: 'Basic',
+  },
+}
+
+const FEATURES = {
+  students: { label: 'Gestão de alunos', icon: 'group' },
+  teachers: { label: 'Gestão de professores', icon: 'badge' },
+  'training-plans': { label: 'Planos de treino', icon: 'fitness_center' },
+  exercises: { label: 'Biblioteca de exercícios', icon: 'exercise' },
+  notifications: { label: 'Notificações', icon: 'notifications' },
+  ads: { label: 'Anúncios', icon: 'campaign' },
+  whitelabel: { label: 'Marca personalizada', icon: 'palette' },
+  reports: { label: 'Relatórios e métricas', icon: 'bar_chart' },
+  'subscription-management': { label: 'Gestão de assinaturas', icon: 'credit_card' },
+  marketplace: { label: 'Marketplace', icon: 'storefront' },
+  wellhub: { label: 'Integração Wellhub', icon: 'link' },
+}
+
+function featureInfo(key) {
+  return FEATURES[key] || { label: key.replace(/-/g, ' '), icon: 'check_circle' }
+}
+
+function formatBRL(value) {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+}
+
+function formatLimit(value) {
+  return value >= 999999 ? 'Ilimitado' : value
+}
 
 const faqs = [
   {
@@ -33,10 +86,13 @@ const faqs = [
   },
 ]
 
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
-
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
+  const [activeTab, setActiveTab] = useState('academy')
+  const [plans, setPlans] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const carouselRef = useRef(null)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -44,10 +100,42 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+    fetch(PLANS_API)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
+      .then((data) => {
+        if (cancelled) return
+        setPlans(Array.isArray(data) ? data : [])
+        setLoading(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setError(true)
+        setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const handlePlayStoreClick = (e) => {
     e.preventDefault()
     window.open(PLAY_STORE_URL, '_blank', 'noopener')
   }
+
+  const scrollCarousel = (direction) => {
+    const el = carouselRef.current
+    if (!el) return
+    const card = el.querySelector('[data-plan-card]')
+    const step = card ? card.offsetWidth + 24 : el.clientWidth * 0.85
+    el.scrollBy({ left: direction * step, behavior: 'smooth' })
+  }
+
+  const copy = tabCopy[activeTab]
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -67,43 +155,256 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section
-        className="pt-32 min-h-[660px] flex items-center relative overflow-hidden bg-cover bg-top bg-no-repeat"
-        style={{ backgroundImage: `url(${headerBgImg})` }}
-      >
-        <div className="absolute inset-0 bg-surface-deep/40" />
-        <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-surface-deep via-surface-deep/80 to-transparent" />
-        <div className="px-6 relative z-10">
-          <div className="text-left ml-[20%]">
-            <div className="inline-block px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-semibold text-xs tracking-widest uppercase font-label-caps">
-              PERFORMANCE DRIVEN
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28" id="inicio">
+        <div className="absolute inset-0 bg-cover bg-top bg-no-repeat" style={{ backgroundImage: `url(${headerBgImg})` }} />
+        <div className="absolute inset-0 bg-surface-deep/45" />
+        <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-surface-deep via-surface-deep/85 to-transparent" />
+        <div className="absolute top-24 -left-40 w-[28rem] h-[28rem] bg-primary/15 blur-[140px] rounded-full" />
+        <div className="absolute top-40 -right-24 w-80 h-80 bg-secondary/10 blur-[120px] rounded-full" />
+
+        <div className="px-6 relative z-10 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-semibold text-xs tracking-widest uppercase font-label-caps">
+                <span className="material-symbols-outlined !text-sm">bolt</span>
+                Performance Driven
+              </div>
+              <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1]">
+                Seu Diário. Sua Rotina.
+                <br />
+                <span className="text-primary">SEUS RESULTADOS.</span>
+              </h1>
+              <p className="text-on-surface-variant text-lg max-w-xl mb-10">
+                O Diário Fit é o app que centraliza seus treinos, alimentação e evolução em um só lugar — com conquistas,
+                medalhas e ranking para manter sua rotina de alta performance.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={handlePlayStoreClick}
+                  className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
+                >
+                  <span className="material-symbols-outlined">play_arrow</span>
+                  Baixar na Play Store
+                </button>
+                <a
+                  href="#funcionalidades"
+                  className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
+                >
+                  Saber mais
+                </a>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
-              Seu Diário. Sua Rotina.<br />
-              <span className="text-primary">SEUS RESULTADOS.</span>
-            </h1>
-            <p className="text-on-surface-variant text-base max-w-xl mb-10">
-              Controle seus treinos, alimentação e evolução em um só lugar. Ganhe conquistas, medalhas e suba de nível enquanto mantém sua rotina de alta performance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-start">
-              <button
-                onClick={handlePlayStoreClick}
-                className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
-              >
-                <span className="material-symbols-outlined">play_arrow</span>
-                Baixar na Play Store
-              </button>
-              <button className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors">
-                Saber mais
-              </button>
+
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="absolute inset-0 bg-primary/10 blur-[120px] rounded-full scale-90" />
+              <img
+                src={bannerImg}
+                alt="Atleta utilizando o Diário Fit com a tela de treino do aplicativo"
+                className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl"
+                loading="eager"
+              />
             </div>
           </div>
         </div>
       </section>
 
+      {/* Plans */}
+      <section className="py-24 md:py-32 relative overflow-hidden" id="planos">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-72 bg-primary/5 blur-[120px] rounded-full" />
+        <div className="px-6 relative max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Planos e Preços</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
+              Escolha o plano ideal para <span className="text-primary">seu negócio</span>
+            </h2>
+            <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
+              Preços transparentes para academias e personal trainers. Cancele quando quiser e comece grátis.
+            </p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex p-1 rounded-2xl bg-surface-container-low border border-white/5 gap-1">
+              {planTabs.map((tab) => {
+                const isActive = activeTab === tab.key
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all ${
+                      isActive
+                        ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
+                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined !text-lg">{tab.icon}</span>
+                    {tab.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="text-center mb-12">
+            <h3 className="text-2xl md:text-3xl font-extrabold mb-3">{copy.title}</h3>
+            <p className="text-on-surface-variant max-w-2xl mx-auto">{copy.description}</p>
+          </div>
+
+          {/* Carousel */}
+          {loading && (
+            <div className="flex gap-6 overflow-hidden">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="min-w-[85%] sm:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]">
+                  <div className="animate-pulse rounded-3xl bg-surface-container-low border border-white/5 p-8 space-y-4">
+                    <div className="h-5 w-1/3 rounded-full bg-surface-container-high" />
+                    <div className="h-3 w-2/3 rounded-full bg-surface-container-high" />
+                    <div className="h-10 w-2/3 rounded-xl bg-surface-container-high" />
+                    <div className="space-y-2 pt-2">
+                      {[0, 1, 2, 3].map((j) => (
+                        <div key={j} className="h-3 w-full rounded-full bg-surface-container-high" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {error && !loading && (
+            <div className="max-w-lg mx-auto text-center bg-surface-container-low rounded-3xl border border-white/5 p-10">
+              <span className="material-symbols-outlined !text-5xl text-primary mb-4">cloud_off</span>
+              <h4 className="text-xl font-bold text-on-surface mb-2">Não foi possível carregar os planos</h4>
+              <p className="text-on-surface-variant text-sm mb-6">
+                Tente novamente em instantes para ver os planos disponíveis.
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform"
+              >
+                Tentar novamente
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && plans.length > 0 && (
+            <div className="relative">
+              <div
+                ref={carouselRef}
+                className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4 px-1"
+                role="region"
+                aria-label="Carrossel de planos"
+              >
+                {plans.map((plan) => {
+                  const isHighlight = plan.name === copy.highlight
+                  const isFree = plan.price === 0
+                  return (
+                    <article
+                      key={plan.id}
+                      data-plan-card
+                      className={`snap-start shrink-0 min-w-[85%] sm:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)] rounded-3xl border p-8 flex flex-col transition-transform hover:-translate-y-1 ${
+                        isHighlight
+                          ? 'bg-gradient-to-b from-surface-container-high to-surface-container-low border-primary/40 shadow-2xl shadow-primary/10'
+                          : 'bg-surface-container-low border-white/5'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-4 gap-3">
+                        <h4 className="text-2xl font-extrabold text-on-surface">{plan.name}</h4>
+                        {isHighlight && (
+                          <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-on-primary bg-primary rounded-full px-3 py-1">
+                            <span className="material-symbols-outlined !text-sm">star</span>
+                            {copy.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">{plan.description}</p>
+
+                      <div className="mb-6">
+                        {isFree ? (
+                          <div className="text-5xl font-extrabold text-on-surface">
+                            Grátis
+                            <span className="block text-sm font-semibold text-on-surface-variant mt-1">para sempre</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-end gap-2">
+                            <span className="text-5xl font-extrabold text-on-surface">{formatBRL(plan.price)}</span>
+                            <span className="text-on-surface-variant font-semibold mb-1.5">/mês</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 mb-6">
+                        <div className="bg-surface-container rounded-xl px-3 py-2 flex items-center gap-2">
+                          <span className="material-symbols-outlined !text-lg text-primary">group</span>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-on-surface-variant">Alunos</div>
+                            <div className="text-sm font-bold text-on-surface">{formatLimit(plan.maxStudents)}</div>
+                          </div>
+                        </div>
+                        <div className="bg-surface-container rounded-xl px-3 py-2 flex items-center gap-2">
+                          <span className="material-symbols-outlined !text-lg text-primary">badge</span>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-on-surface-variant">Professores</div>
+                            <div className="text-sm font-bold text-on-surface">{formatLimit(plan.maxTeachers)}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-white/5 pt-6 mb-8 flex-1">
+                        <h5 className="text-xs uppercase tracking-widest font-semibold text-on-surface-variant font-label-caps mb-4">
+                          Recursos incluídos
+                        </h5>
+                        <ul className="space-y-3">
+                          {(plan.features || []).map((feature) => {
+                            const info = featureInfo(feature)
+                            return (
+                              <li key={feature} className="flex items-center gap-3 text-sm text-on-surface">
+                                <span className="material-symbols-outlined !text-lg text-primary shrink-0">{info.icon}</span>
+                                {info.label}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+
+                      <a
+                        href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Olá! Tenho interesse no plano ${plan.name} do Diário Fit.`)}`}
+                        target="_blank"
+                        rel="noopener"
+                        className={`w-full text-center px-6 py-3.5 rounded-xl font-bold text-base transition-all hover:scale-[1.02] active:scale-95 ${
+                          isHighlight
+                            ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
+                            : 'bg-white/5 text-on-surface hover:bg-primary/10 hover:text-primary'
+                        }`}
+                      >
+                        Quero este plano
+                      </a>
+                    </article>
+                  )
+                })}
+              </div>
+
+              <button
+                onClick={() => scrollCarousel(-1)}
+                aria-label="Planos anteriores"
+                className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:flex w-11 h-11 rounded-full bg-surface-container-high border border-white/10 items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"
+              >
+                <span className="material-symbols-outlined">chevron_left</span>
+              </button>
+              <button
+                onClick={() => scrollCarousel(1)}
+                aria-label="Próximos planos"
+                className="absolute -right-4 top-1/2 -translate-y-1/2 hidden md:flex w-11 h-11 rounded-full bg-surface-container-high border border-white/10 items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"
+              >
+                <span className="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Social Proof Stats */}
-      <section className="py-20 bg-surface-container-lowest/50 border-y border-white/5">
+      <section className="py-16 bg-surface-container-lowest/50 border-y border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
             {stats.map((s) => (
@@ -122,10 +423,11 @@ export default function Home() {
       </section>
 
       {/* Features Sections */}
-      <section className="py-32">
+      <section className="py-24 md:py-32" id="funcionalidades">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Recursos</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
               Tudo o que você precisa em <span className="text-primary">um só app</span>
             </h2>
             <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
@@ -160,9 +462,10 @@ export default function Home() {
                 </ul>
               </div>
               <div className="flex-1 order-1 lg:order-2">
-                <div className="bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="bg-surface-container rounded-2xl h-80 flex items-center justify-center">
-                    <span className="material-symbols-outlined !text-[240px] text-primary/20">exercise</span>
+                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
+                  <div className="absolute inset-x-8 top-8 h-40 bg-primary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[220px] text-primary/20">exercise</span>
                   </div>
                 </div>
               </div>
@@ -171,9 +474,10 @@ export default function Home() {
             {/* Feature 2: Nutrição */}
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="flex-1">
-                <div className="bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="bg-surface-container rounded-2xl h-80 flex items-center justify-center">
-                    <span className="material-symbols-outlined !text-[240px] text-secondary/20">restaurant</span>
+                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
+                  <div className="absolute inset-x-8 top-8 h-40 bg-secondary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[220px] text-secondary/20">restaurant</span>
                   </div>
                 </div>
               </div>
@@ -226,9 +530,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex-1 order-1 lg:order-2">
-                <div className="bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="bg-surface-container rounded-2xl h-80 flex items-center justify-center">
-                    <span className="material-symbols-outlined !text-[240px] text-tertiary/20">emoji_events</span>
+                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
+                  <div className="absolute inset-x-8 top-8 h-40 bg-tertiary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[220px] text-tertiary/20">emoji_events</span>
                   </div>
                 </div>
               </div>
@@ -238,10 +543,11 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-32 px-6">
+      <section className="py-24 md:py-32 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Dúvidas</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
               Perguntas <span className="text-primary">frequentes</span>
             </h2>
             <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
@@ -266,7 +572,7 @@ export default function Home() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-32 px-6">
+      <section className="py-24 md:py-32 px-6">
         <div className="max-w-5xl mx-auto bg-gradient-to-br from-surface-container-high to-surface-container-lowest rounded-[2rem] p-12 lg:p-20 text-center relative overflow-hidden border border-white/5">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[100px] -ml-32 -mb-32" />
@@ -295,7 +601,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-surface-deep pt-32 pb-16 border-t border-white/5">
+      <footer className="bg-surface-deep pt-24 pb-16 border-t border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
             <div>
@@ -313,8 +619,8 @@ export default function Home() {
                   PLATAFORMA
                 </h4>
                 <ul className="space-y-4 text-sm text-on-surface-variant">
-                  <li><a href="#" className="hover:text-primary transition-colors">Funcionalidades</a></li>
-                  <li><a href="#" className="hover:text-primary transition-colors">Planos</a></li>
+                  <li><a href="#funcionalidades" className="hover:text-primary transition-colors">Funcionalidades</a></li>
+                  <li><a href="#planos" className="hover:text-primary transition-colors">Planos</a></li>
                   <li><a href="#" className="hover:text-primary transition-colors">TACO Database</a></li>
                 </ul>
               </div>
@@ -352,8 +658,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Empty spacer for removed modal */}
     </div>
   )
 }

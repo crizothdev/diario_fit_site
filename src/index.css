@@ -61,3 +61,18 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+section[id],
+footer[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
