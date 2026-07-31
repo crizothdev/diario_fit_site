@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import headerBgImg from '../assets/header_bg.jpeg'
 import logoImg from '../assets/foreground.png'
-import bannerImg from '../assets/app_use_banner.png'
 
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
 const WHATSAPP_URL = 'https://wa.me/5512981539092'
@@ -16,11 +15,50 @@ const stats = [
 ]
 
 const planTabs = [
-  { key: 'academy', label: 'Sou Academia', icon: 'fitness_center' },
+  { key: 'improve', label: 'Quero melhorar meu treino', icon: 'fitness_center' },
+  { key: 'academy', label: 'Sou Academia', icon: 'apartment' },
   { key: 'personal', label: 'Sou Personal Trainer', icon: 'person_pin_circle' },
 ]
 
+const individualFeatures = [
+  {
+    icon: 'fitness_center',
+    label: 'Monte seu treino',
+    text: 'Crie seus próprios templates do A ao G e registre cada série, repetição e volume total.',
+  },
+  {
+    icon: 'restaurant_menu',
+    label: 'Controle sua alimentação',
+    text: 'Registre refeições e macros na base oficial TACO, com mais de 189 alimentos cadastrados.',
+  },
+  {
+    icon: 'local_fire_department',
+    label: 'Calorias automáticas',
+    text: 'Descubra seu gasto energético diário calculado por METs, sem precisar de calculadora.',
+  },
+  {
+    icon: 'military_tech',
+    label: 'Gamificação',
+    text: 'Ganhe XP, conquiste medalhas e suba no ranking de temporada a cada treino concluído.',
+  },
+  {
+    icon: 'verified_user',
+    label: 'Privacidade total',
+    text: 'Seus dados ficam salvos apenas no seu dispositivo, sem servidores externos.',
+  },
+  {
+    icon: 'devices',
+    label: 'Onde você estiver',
+    text: 'Disponível para Android na Play Store e em breve para iOS, com dashboard web.',
+  },
+]
+
 const tabCopy = {
+  improve: {
+    title: 'O Diário Fit é 100% gratuito para você',
+    description:
+      'O app feito para quem quer melhorar o treino por conta própria. Gerencie sua rotina, alimentação e evolução sem pagar nada — é só baixar e começar.',
+  },
   academy: {
     title: 'Planos para Academias',
     description:
@@ -63,32 +101,9 @@ function formatLimit(value) {
   return value >= 999999 ? 'Ilimitado' : value
 }
 
-const faqs = [
-  {
-    q: 'O Diário Fit é gratuito?',
-    a: 'Sim. O Diário Fit é 100% gratuito para atletas e é mantido pela exibição de anúncios do Google AdMob.',
-  },
-  {
-    q: 'O Diário Fit calcula calorias?',
-    a: 'Sim. O app calcula automaticamente o gasto energético das atividades físicas usando METs e ajuda a manter o controle das calorias diárias.',
-  },
-  {
-    q: 'Quais alimentos estão cadastrados no Diário Fit?',
-    a: 'O Diário Fit usa a base oficial TACO com mais de 189 alimentos, permitindo o tracking de macronutrientes em tempo real.',
-  },
-  {
-    q: 'Onde meus dados ficam armazenados?',
-    a: 'Todos os seus dados de treino, nutrição e perfil ficam armazenados localmente no seu dispositivo. O Diário Fit não mantém servidores de dados pessoais.',
-  },
-  {
-    q: 'O Diário Fit tem versão para iPhone?',
-    a: 'O app está disponível para Android na Google Play. A versão para iOS está em desenvolvimento e será lançada em breve.',
-  },
-]
-
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
-  const [activeTab, setActiveTab] = useState('academy')
+  const [activeTab, setActiveTab] = useState('improve')
   const [plans, setPlans] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -137,6 +152,11 @@ export default function Home() {
 
   const copy = tabCopy[activeTab]
 
+  const roleForTab = { academy: 'tenant_admin', personal: 'personal_trainer' }
+  const visiblePlans = plans.filter(
+    (plan) => !plan.allowedRoles?.length || plan.allowedRoles.includes(roleForTab[activeTab])
+  )
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       {/* Header */}
@@ -164,46 +184,34 @@ export default function Home() {
         <div className="absolute top-40 -right-24 w-80 h-80 bg-secondary/10 blur-[120px] rounded-full" />
 
         <div className="px-6 relative z-10 max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-semibold text-xs tracking-widest uppercase font-label-caps">
-                <span className="material-symbols-outlined !text-sm">bolt</span>
-                Performance Driven
-              </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1]">
-                Seu Diário. Sua Rotina.
-                <br />
-                <span className="text-primary">SEUS RESULTADOS.</span>
-              </h1>
-              <p className="text-on-surface-variant text-lg max-w-xl mb-10">
-                O Diário Fit é o app que centraliza seus treinos, alimentação e evolução em um só lugar — com conquistas,
-                medalhas e ranking para manter sua rotina de alta performance.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={handlePlayStoreClick}
-                  className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
-                >
-                  <span className="material-symbols-outlined">play_arrow</span>
-                  Baixar na Play Store
-                </button>
-                <a
-                  href="#funcionalidades"
-                  className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
-                >
-                  Saber mais
-                </a>
-              </div>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1 mb-6 rounded-full bg-primary/10 text-primary font-semibold text-xs tracking-widest uppercase font-label-caps">
+              <span className="material-symbols-outlined !text-sm">bolt</span>
+              Performance Driven
             </div>
-
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="absolute inset-0 bg-primary/10 blur-[120px] rounded-full scale-90" />
-              <img
-                src={bannerImg}
-                alt="Atleta utilizando o Diário Fit com a tela de treino do aplicativo"
-                className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl"
-                loading="eager"
-              />
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1]">
+              Seu Diário. Sua Rotina.
+              <br />
+              <span className="text-primary">SEUS RESULTADOS.</span>
+            </h1>
+            <p className="text-on-surface-variant text-lg max-w-2xl mx-auto mb-10">
+              O Diário Fit é o app que centraliza seus treinos, alimentação e evolução em um só lugar — com conquistas,
+              medalhas e ranking para manter sua rotina de alta performance.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={handlePlayStoreClick}
+                className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
+              >
+                <span className="material-symbols-outlined">play_arrow</span>
+                Baixar na Play Store
+              </button>
+              <a
+                href="#funcionalidades"
+                className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
+              >
+                Saber mais
+              </a>
             </div>
           </div>
         </div>
@@ -216,10 +224,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Planos e Preços</span>
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
-              Escolha o plano ideal para <span className="text-primary">seu negócio</span>
+              Escolha o que combina <span className="text-primary">com você</span>
             </h2>
             <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
-              Preços transparentes para academias e personal trainers. Cancele quando quiser e comece grátis.
+              Para atletas, academias e personal trainers. Use grátis ou escolha o plano ideal para o seu negócio.
             </p>
           </div>
 
@@ -251,8 +259,58 @@ export default function Home() {
             <p className="text-on-surface-variant max-w-2xl mx-auto">{copy.description}</p>
           </div>
 
+          {/* Individual content */}
+          {activeTab === 'improve' && (
+            <div className="max-w-4xl mx-auto">
+              <div className="relative overflow-hidden rounded-[2rem] border border-primary/30 bg-gradient-to-b from-surface-container-high to-surface-container-low p-8 md:p-14">
+                <div className="relative z-10 text-center mb-12">
+                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-on-primary bg-primary rounded-full px-4 py-1.5 mb-6">
+                    <span className="material-symbols-outlined !text-sm">verified</span>
+                    100% grátis para sempre
+                  </span>
+                  <h4 className="text-3xl md:text-4xl font-extrabold mb-4">Seu treino, do seu jeito</h4>
+                  <p className="text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                    O Diário Fit foi feito para quem quer melhorar o treino por conta própria. Sem mensalidade, sem
+                    planilhas e sem complicação: você mesmo gerencia seus treinos, alimentação e evolução na palma da mão.
+                  </p>
+                </div>
+
+                <div className="relative z-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+                  {individualFeatures.map((feature) => (
+                    <div
+                      key={feature.label}
+                      className="bg-surface-container rounded-2xl border border-white/5 p-5 flex flex-col items-start gap-3 hover:border-primary/30 transition-colors"
+                    >
+                      <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                        <span className="material-symbols-outlined !text-2xl">{feature.icon}</span>
+                      </div>
+                      <h5 className="font-bold text-on-surface">{feature.label}</h5>
+                      <p className="text-sm text-on-surface-variant leading-relaxed">{feature.text}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <button
+                    onClick={handlePlayStoreClick}
+                    className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
+                  >
+                    <span className="material-symbols-outlined">play_arrow</span>
+                    Baixar grátis na Play Store
+                  </button>
+                  <a
+                    href="#funcionalidades"
+                    className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
+                  >
+                    Conhecer o app
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Carousel */}
-          {loading && (
+          {activeTab !== 'improve' && loading && (
             <div className="flex gap-6 overflow-hidden">
               {[0, 1, 2].map((i) => (
                 <div key={i} className="min-w-[85%] sm:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]">
@@ -271,7 +329,7 @@ export default function Home() {
             </div>
           )}
 
-          {error && !loading && (
+          {activeTab !== 'improve' && error && !loading && (
             <div className="max-w-lg mx-auto text-center bg-surface-container-low rounded-3xl border border-white/5 p-10">
               <span className="material-symbols-outlined !text-5xl text-primary mb-4">cloud_off</span>
               <h4 className="text-xl font-bold text-on-surface mb-2">Não foi possível carregar os planos</h4>
@@ -287,7 +345,17 @@ export default function Home() {
             </div>
           )}
 
-          {!loading && !error && plans.length > 0 && (
+          {activeTab !== 'improve' && !loading && !error && visiblePlans.length === 0 && (
+            <div className="max-w-lg mx-auto text-center bg-surface-container-low rounded-3xl border border-white/5 p-10">
+              <span className="material-symbols-outlined !text-5xl text-primary mb-4">info</span>
+              <h4 className="text-xl font-bold text-on-surface mb-2">Nenhum plano disponível</h4>
+              <p className="text-on-surface-variant text-sm">
+                Ainda não há planos liberados para este perfil. Fale com a gente para saber mais.
+              </p>
+            </div>
+          )}
+
+          {activeTab !== 'improve' && !loading && !error && visiblePlans.length > 0 && (
             <div className="relative">
               <div
                 ref={carouselRef}
@@ -295,7 +363,7 @@ export default function Home() {
                 role="region"
                 aria-label="Carrossel de planos"
               >
-                {plans.map((plan) => {
+                {visiblePlans.map((plan) => {
                   const isHighlight = plan.name === copy.highlight
                   const isFree = plan.price === 0
                   return (
@@ -322,8 +390,10 @@ export default function Home() {
                       <div className="mb-6">
                         {isFree ? (
                           <div className="text-5xl font-extrabold text-on-surface">
-                            Grátis
-                            <span className="block text-sm font-semibold text-on-surface-variant mt-1">para sempre</span>
+                            Free Trial
+                            <span className="block text-sm font-semibold text-on-surface-variant mt-1">
+                              15 dias de teste grátis
+                            </span>
                           </div>
                         ) : (
                           <div className="flex items-end gap-2">
@@ -538,35 +608,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-24 md:py-32 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Dúvidas</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
-              Perguntas <span className="text-primary">frequentes</span>
-            </h2>
-            <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
-              Respostas diretas sobre o Diário Fit, seus recursos, privacidade e disponibilidade.
-            </p>
-          </div>
-          <div className="space-y-4">
-            {faqs.map((f) => (
-              <details
-                key={f.q}
-                className="group bg-surface-container-low border border-white/5 rounded-2xl px-6 py-5 open:bg-surface-container transition-colors"
-              >
-                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none text-lg font-bold text-on-surface">
-                  {f.q}
-                  <span className="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
-                </summary>
-                <p className="mt-4 text-on-surface-variant text-base leading-relaxed">{f.a}</p>
-              </details>
-            ))}
           </div>
         </div>
       </section>
