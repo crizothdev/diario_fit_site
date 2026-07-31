@@ -10,6 +10,29 @@ const stats = [
   { icon: 'verified_user', value: '100%', label: 'Grátis Atletas' },
 ]
 
+const faqs = [
+  {
+    q: 'O Diário Fit é gratuito?',
+    a: 'Sim. O Diário Fit é 100% gratuito para atletas e é mantido pela exibição de anúncios do Google AdMob.',
+  },
+  {
+    q: 'O Diário Fit calcula calorias?',
+    a: 'Sim. O app calcula automaticamente o gasto energético das atividades físicas usando METs e ajuda a manter o controle das calorias diárias.',
+  },
+  {
+    q: 'Quais alimentos estão cadastrados no Diário Fit?',
+    a: 'O Diário Fit usa a base oficial TACO com mais de 189 alimentos, permitindo o tracking de macronutrientes em tempo real.',
+  },
+  {
+    q: 'Onde meus dados ficam armazenados?',
+    a: 'Todos os seus dados de treino, nutrição e perfil ficam armazenados localmente no seu dispositivo. O Diário Fit não mantém servidores de dados pessoais.',
+  },
+  {
+    q: 'O Diário Fit tem versão para iPhone?',
+    a: 'O app está disponível para Android na Google Play. A versão para iOS está em desenvolvimento e será lançada em breve.',
+  },
+]
+
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
 
 export default function Home() {
@@ -210,6 +233,34 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-32 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+              Perguntas <span className="text-primary">frequentes</span>
+            </h2>
+            <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
+              Respostas diretas sobre o Diário Fit, seus recursos, privacidade e disponibilidade.
+            </p>
+          </div>
+          <div className="space-y-4">
+            {faqs.map((f) => (
+              <details
+                key={f.q}
+                className="group bg-surface-container-low border border-white/5 rounded-2xl px-6 py-5 open:bg-surface-container transition-colors"
+              >
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none text-lg font-bold text-on-surface">
+                  {f.q}
+                  <span className="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <p className="mt-4 text-on-surface-variant text-base leading-relaxed">{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

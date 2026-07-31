@@ -1,14 +1,221 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icon-512.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diário Fit - Transforme sua Performance</title>
+    <meta name="theme-color" content="#020617" />
+
+    <title>Diário Fit — Treino, Nutrição e Evolução em um App</title>
+    <meta name="description" content="O Diário Fit é o app gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação. Controle sua performance em um só lugar." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://diariofit.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Diário Fit" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://diariofit.app/" />
+    <meta property="og:title" content="Diário Fit — Treino, Nutrição e Evolução em um App" />
+    <meta property="og:description" content="O Diário Fit é o app gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação. Controle sua performance em um só lugar." />
+    <meta property="og:image" content="https://diariofit.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Diário Fit — Treino, Nutrição e Evolução em um App" />
+    <meta name="twitter:description" content="O Diário Fit é o app gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação. Controle sua performance em um só lugar." />
+    <meta name="twitter:image" content="https://diariofit.app/og.png" />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <script type="application/ld+json" id="seo-schema">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Diário Fit",
+        "url": "https://diariofit.app",
+        "logo": "https://diariofit.app/icon-512.png",
+        "description": "Aplicativo gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Diário Fit",
+        "url": "https://diariofit.app",
+        "description": "O Diário Fit é o app gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação.",
+        "inLanguage": "pt-BR"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Diário Fit",
+        "applicationCategory": "HealthAndFitnessApplication",
+        "operatingSystem": "Android",
+        "url": "https://diariofit.app",
+        "downloadUrl": "https://play.google.com/store/apps/details?id=br.com.diariofit",
+        "description": "Diário de treino e nutrição gratuito com registro de séries, cálculo de calorias por METs, base TACO e gamificação.",
+        "image": "https://diariofit.app/og.png",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "BRL"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Diário Fit — Treino, Nutrição e Evolução em um App",
+        "url": "https://diariofit.app/",
+        "description": "O Diário Fit é o app gratuito de diário de treino e nutrição com base TACO, cálculo de calorias por METs e gamificação. Controle sua performance em um só lugar.",
+        "inLanguage": "pt-BR",
+        "isPartOf": {
+          "@type": "WebSite",
+          "url": "https://diariofit.app",
+          "name": "Diário Fit"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "O Diário Fit é gratuito?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. O Diário Fit é 100% gratuito para atletas e é mantido pela exibição de anúncios do Google AdMob."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "O Diário Fit calcula calorias?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. O app calcula automaticamente o gasto energético das atividades físicas usando METs e ajuda a manter o controle das calorias diárias."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quais alimentos estão cadastrados no Diário Fit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "O Diário Fit usa a base oficial TACO com mais de 189 alimentos cadastrados, permitindo o tracking de macronutrientes em tempo real."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Onde meus dados ficam armazenados?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Todos os seus dados de treino, nutrição e perfil ficam armazenados localmente no seu dispositivo. O Diário Fit não mantém servidores de dados pessoais."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "O Diário Fit tem versão para iPhone?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "O app está disponível para Android na Google Play. A versão para iOS está em desenvolvimento e será lançada em breve."
+            }
+          }
+        ]
+      }
+    ]
+    </script>
+
+    <style>
+      .seo-fallback { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; font-family: 'Inter', system-ui, sans-serif; }
+      .seo-fallback h1 { font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; color: #dae2fd; }
+      .seo-fallback h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 0.75rem; color: #dae2fd; }
+      .seo-fallback h3 { font-size: 1.125rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: #4fdbc8; }
+      .seo-fallback p { font-size: 1rem; line-height: 1.7; color: #bbcac6; margin: 0 0 1rem; }
+      .seo-fallback ul, .seo-fallback ol { color: #bbcac6; line-height: 1.7; padding-left: 1.5rem; margin: 0 0 1rem; }
+      .seo-fallback a { color: #4fdbc8; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!--seo-content-->
+      <div class="seo-fallback">
+        <header>
+          <h1>Diário Fit — Diário de Treino e Nutrição Inteligente</h1>
+          <p>O Diário Fit é o aplicativo gratuito de diário de treino e nutrição que reúne registro de séries, cálculo de calorias por METs, base de alimentos TACO e gamificação em um só lugar. É a ferramenta ideal para atletas que querem controlar performance, alimentação e evolução todos os dias, sem planilhas manuais.</p>
+        </header>
+
+        <section>
+          <h2>O que é o Diário Fit?</h2>
+          <p>O Diário Fit é um aplicativo mobile de alta performance para registrar treinos, monitorar a nutrição e acompanhar a evolução física. Ele combina a base oficial de alimentos TACO, cálculo automático de gasto energético por METs e um sistema completo de conquistas e ranking.</p>
+          <p>Em vez de espalhar sua rotina em planilhas e cadernos, você centraliza treinos, refeições, medidas e conquistas em uma única plataforma. Assim, cada sessão de treino gera dados que alimentam seu histórico e sua evolução diária.</p>
+        </section>
+
+        <section>
+          <h2>Principais recursos do Diário Fit</h2>
+          <p>O Diário Fit foi projetado para eliminar a complexidade e focar em resultados. Os principais recursos incluem:</p>
+          <ul>
+            <li>Registro de séries, repetições e volume total de treino.</li>
+            <li>Templates de treino personalizados, do A ao G, com histórico por exercício.</li>
+            <li>Cálculo automático de calorias e gasto energético por METs.</li>
+            <li>Base oficial TACO com mais de 189 alimentos cadastrados.</li>
+            <li>Tracking de macronutrientes em tempo real e diário alimentar integrado.</li>
+            <li>Gamificação com XP, medalhas, ranking de temporada e 5 níveis de evolução.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Para quem é o Diário Fit?</h2>
+          <p>O app é feito para quem leva o treinamento a sério:</p>
+          <ul>
+            <li>Iniciantes que querem criar o hábito de registrar treinos e refeições.</li>
+            <li>Atletas intermediários que buscam volume de treino e controle calórico.</li>
+            <li>Avançados que desejam histórico detalhado e dados de desempenho.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Números que comprovam</h2>
+          <ul>
+            <li>Mais de 189 alimentos da tabela TACO cadastrados.</li>
+            <li>7 templates de treino disponíveis.</li>
+            <li>5 níveis de ranking para evolução gamificada.</li>
+            <li>100% gratuito para atletas.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Como começar no Diário Fit</h2>
+          <ol>
+            <li>Baixe o Diário Fit na Google Play Store.</li>
+            <li>Crie seu perfil com peso, altura, idade e objetivo.</li>
+            <li>Monte seu template de treino ou registre sua primeira sessão.</li>
+            <li>Acompanhe macros, calorias, conquistas e ranking diariamente.</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Perguntas frequentes</h2>
+          <h3>O Diário Fit é gratuito?</h3>
+          <p>Sim. O Diário Fit é 100% gratuito para atletas e é mantido pela exibição de anúncios do Google AdMob.</p>
+          <h3>O Diário Fit calcula calorias?</h3>
+          <p>Sim. O app calcula automaticamente o gasto energético das atividades físicas usando METs e ajuda a manter o controle das calorias diárias.</p>
+          <h3>Quais alimentos estão cadastrados no Diário Fit?</h3>
+          <p>O Diário Fit usa a base oficial TACO com mais de 189 alimentos, permitindo o tracking de macronutrientes em tempo real.</p>
+          <h3>Onde meus dados ficam armazenados?</h3>
+          <p>Todos os seus dados de treino, nutrição e perfil ficam armazenados localmente no seu dispositivo. O Diário Fit não mantém servidores de dados pessoais.</p>
+          <h3>O Diário Fit tem versão para iPhone?</h3>
+          <p>O app está disponível para Android na Google Play. A versão para iOS está em desenvolvimento e será lançada em breve.</p>
+        </section>
+
+        <section>
+          <h2>Conclusão</h2>
+          <p>O Diário Fit é a plataforma definitiva para quem busca consistência e evolução no treinamento. Combine treinos inteligentes, nutrição de precisão e gamificação em um único app gratuito, e leve sua performance ao próximo nível.</p>
+        </section>
+      </div>
+      <!--/seo-content-->
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
