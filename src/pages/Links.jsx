@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import logoImg from '../assets/foreground.png'
 import googlePlayLogo from '../assets/google_play_logo.png'
 import appleLogo from '../assets/apple_logo.png'
@@ -44,6 +45,24 @@ export default function Links() {
             <img src={whatsappLogo} alt="" className="h-6 w-6" />
             Fale Conosco
           </a>
+
+          <a
+            href="https://www.instagram.com/diariofit.app"
+            target="_blank"
+            rel="noopener"
+            className="bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-white px-6 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined">camera</span>
+            Instagram &mdash; @diariofit.app
+          </a>
+
+          <Link
+            to="/painel"
+            className="bg-[#1B2733] text-white px-6 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all border border-white/10"
+          >
+            <span className="material-symbols-outlined">admin_panel_settings</span>
+            Painel Diário Fit
+          </Link>
         </div>
 
         <p className="mt-12 text-xs text-on-surface-variant/40">

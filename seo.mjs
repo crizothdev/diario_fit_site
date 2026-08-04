@@ -52,8 +52,31 @@ const LINKS_CONTENT = `
       <li><a href="https://play.google.com/store/apps/details?id=br.com.diariofit">Baixar Diário Fit na Google Play Store</a> — disponível para Android.</li>
       <li>App Store (iOS) — versão em breve.</li>
       <li><a href="https://wa.me/5512981539092">Fale conosco pelo WhatsApp</a> — suporte e dúvidas.</li>
+      <li><a href="https://www.instagram.com/diariofit.app">Instagram @diariofit.app</a> — novidades e conteúdo.</li>
     </ul>
     <p>O Diário Fit é gratuito e permite registrar treinos, monitorar a alimentação e acompanhar sua evolução com gamificação.</p>
+  </section>
+</div>
+`
+
+const PAINEL_CONTENT = `
+<div class="seo-fallback">
+  <header>
+    <h1>Painel Diário Fit — Gestão de Academias e Personal Trainers</h1>
+    <p>O painel administrativo do Diário Fit permite que academias e personal trainers controlem os treinos dos alunos, acompanhem a evolução e entreguem um app com a cara do seu negócio (white label).</p>
+  </header>
+  <section>
+    <h2>Como funciona o painel</h2>
+    <ul>
+      <li>Cadastre alunos e envie treinos direto para o app deles, sem papel.</li>
+      <li>Acompanhe frequência, carga, volume e evolução em relatórios completos.</li>
+      <li>Personalize cores, logo e marca (white label).</li>
+      <li>Mantenha treinos pré-estabelecidos para agilizar a entrada de novos alunos.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Planos do painel</h2>
+    <p>O painel Diário Fit está em desenvolvimento e ainda não está operando. Os valores apresentados são fictícios. Para saber mais, fale conosco pelo WhatsApp.</p>
   </section>
 </div>
 `
@@ -128,6 +151,21 @@ export const ROUTES = {
         'Baixar Diário Fit — Links Oficiais',
         'Baixe o Diário Fit na Google Play Store e fale conosco pelo WhatsApp. Links oficiais do app gratuito de treino e nutrição com gamificação.',
       ),
+    ],
+  },
+  painel: {
+    url: `${SITE_URL}/painel`,
+    title: 'Painel Diário Fit — Gestão para Academias e Personal Trainers',
+    description:
+      'O painel do Diário Fit permite gerenciar alunos, enviar treinos, acompanhar a evolução e deixar o app com a cara do seu negócio (white label).',
+    staticContent: PAINEL_CONTENT,
+    schemas: [
+      pageSchema(
+        `${SITE_URL}/painel`,
+        'Painel Diário Fit — Gestão para Academias e Personal Trainers',
+        'O painel do Diário Fit permite gerenciar alunos, enviar treinos, acompanhar a evolução e deixar o app com a cara do seu negócio (white label).',
+      ),
+      breadcrumbSchema(`${SITE_URL}/painel`, 'Painel Diário Fit'),
     ],
   },
 }

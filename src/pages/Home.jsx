@@ -6,6 +6,7 @@ import logoImg from '../assets/foreground.png'
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.com.diariofit'
 const WHATSAPP_URL = 'https://wa.me/5512981539092'
 const PLANS_API = 'https://api-dev.diariofit.app.br/plan/active'
+const LEAD_FORM_ENDPOINT = 'https://formsubmit.co/ajax/crizoth.dev%2Bdiariofitform@gmail.com'
 
 const stats = [
   { icon: 'restaurant_menu', value: '189+', label: 'Alimentos TACO' },
@@ -15,12 +16,35 @@ const stats = [
 ]
 
 const planTabs = [
-  { key: 'improve', label: 'Quero melhorar meu treino', icon: 'fitness_center' },
   { key: 'academy', label: 'Sou Academia', icon: 'apartment' },
   { key: 'personal', label: 'Sou Personal Trainer', icon: 'person_pin_circle' },
 ]
 
-const individualFeatures = [
+const navLinks = [
+  { label: 'Início', href: '#inicio' },
+  { label: 'O App', href: '#app' },
+  { label: 'Funcionalidades', href: '#funcionalidades' },
+  { label: 'Planos', href: '#planos' },
+  { label: 'Para Negócios', href: '#negocios' },
+  { label: 'FAQ', href: '#faq' },
+]
+
+const appPillars = [
+  {
+    icon: 'verified_user',
+    label: 'Gratuito para sempre',
+    text: 'Todas as funções do app são gratuitas. Monte treinos, registre refeições e acompanhe sua evolução sem pagar nada.',
+  },
+  {
+    icon: 'link',
+    label: 'Integração com academia parceira',
+    text: 'Sua academia aderiu ao Diário Fit? Receba seus treinos e o acompanhamento do professor direto no app, sem depender da ficha em papel.',
+  },
+  {
+    icon: 'description',
+    label: 'Da ficha de papel para a digital',
+    text: 'O app não substitui o profissional: ele repassa o treino da ficha de papel para uma ficha digital organizada, sempre à mão.',
+  },
   {
     icon: 'fitness_center',
     label: 'Monte seu treino',
@@ -42,9 +66,14 @@ const individualFeatures = [
     text: 'Ganhe XP, conquiste medalhas e suba no ranking de temporada a cada treino concluído.',
   },
   {
-    icon: 'verified_user',
+    icon: 'lock',
     label: 'Privacidade total',
     text: 'Seus dados ficam salvos apenas no seu dispositivo, sem servidores externos.',
+  },
+  {
+    icon: 'trending_up',
+    label: 'Evolução com dados',
+    text: 'Histórico de séries, repetições, volume e calorias para você e para quem acompanha seu treino.',
   },
   {
     icon: 'devices',
@@ -53,12 +82,53 @@ const individualFeatures = [
   },
 ]
 
-const tabCopy = {
-  improve: {
-    title: 'O Diário Fit é 100% gratuito para você',
-    description:
-      'O app feito para quem quer melhorar o treino por conta própria. Gerencie sua rotina, alimentação e evolução sem pagar nada — é só baixar e começar.',
+const businessFeatures = [
+  {
+    icon: 'dashboard',
+    title: 'Painel administrativo',
+    text: 'Crie e envie treinos para seus alunos e acompanhe a evolução de cada um em tempo real.',
   },
+  {
+    icon: 'palette',
+    title: 'White label — com a cara do seu negócio',
+    text: 'Personalize cores, logo e marca. Seus alunos usam um app exclusivo da sua academia.',
+  },
+  {
+    icon: 'devices',
+    title: 'Alunos no app, você no controle',
+    text: 'Seus alunos acompanham os treinos no celular enquanto você gerencia tudo pelo painel.',
+  },
+]
+
+const faqItems = [
+  {
+    question: 'O Diário Fit é gratuito?',
+    answer:
+      'Sim! O app é 100% gratuito para atletas, alunos e qualquer pessoa que queira organizar treinos e alimentação. Você baixa, monta seus treinos, registra refeições e acompanha sua evolução sem pagar nada — para sempre.',
+  },
+  {
+    question: 'O Diário Fit monta o meu treino?',
+    answer:
+      'Não. O app não dispensa o profissional de educação física — pelo contrário, ele valoriza o seu trabalho. O Diário Fit serve para repassar o treino da ficha de papel para uma ficha digital, organizada e sempre à mão.',
+  },
+  {
+    question: 'Qualquer academia usa o Diário Fit?',
+    answer:
+      'Qualquer pessoa pode usar o app gratuitamente. Mas, para a academia gerenciar seus alunos e os treinos deles, ela precisa aderir a um dos planos do painel Diário Fit.',
+  },
+  {
+    question: 'Minha academia precisa assinar o painel para eu usar o app?',
+    answer:
+      'Não. A assinatura do painel permite que a academia crie os treinos dos alunos com mais facilidade, gerencie tudo e mantenha treinos pré-estabelecidos para agilizar a entrada de novos alunos. Mas o aluno de academia pode gerenciar o próprio treino no app sem depender da assinatura da academia.',
+  },
+  {
+    question: 'Para quem é o Diário Fit?',
+    answer:
+      'Para todos que levam treino e saúde a sério: alunos de academia que querem deixar a ficha de papel de lado; academias que querem se modernizar e se renovar; personal trainers que querem acompanhar de perto a evolução dos seus alunos; pessoas que querem controlar a ingestão de calorias por saúde ou esporte; e nutricionistas que querem acompanhar seus pacientes.',
+  },
+]
+
+const tabCopy = {
   academy: {
     title: 'Planos para Academias',
     description:
@@ -103,14 +173,26 @@ function formatLimit(value) {
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
-  const [activeTab, setActiveTab] = useState('improve')
+  const [activeTab, setActiveTab] = useState('academy')
   const [plans, setPlans] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [panelModalOpen, setPanelModalOpen] = useState(false)
+  const [openFaq, setOpenFaq] = useState(0)
+  const [planModalOpen, setPlanModalOpen] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState(null)
+  const [leadForm, setLeadForm] = useState({ name: '', email: '', whatsapp: '', role: 'academia' })
+  const [leadStatus, setLeadStatus] = useState('idle')
   const carouselRef = useRef(null)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
+    let lastY = window.scrollY
+    const handleScroll = () => {
+      const y = window.scrollY
+      const goingDown = y > lastY
+      lastY = y
+      setScrolled(y > 100 && goingDown)
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -142,6 +224,39 @@ export default function Home() {
     window.open(PLAY_STORE_URL, '_blank', 'noopener')
   }
 
+  const openPlanModal = (plan) => {
+    setSelectedPlan(plan)
+    setLeadForm({
+      name: '',
+      email: '',
+      whatsapp: '',
+      role: activeTab === 'personal' ? 'personal' : 'academia',
+    })
+    setLeadStatus('idle')
+    setPlanModalOpen(true)
+  }
+
+  const handleLeadSubmit = async (e) => {
+    e.preventDefault()
+    setLeadStatus('submitting')
+    const profile = leadForm.role === 'personal' ? 'Personal Trainer' : 'Academia'
+    const formData = new FormData()
+    formData.append('nome', leadForm.name)
+    formData.append('email', leadForm.email)
+    formData.append('whatsapp', leadForm.whatsapp)
+    formData.append('perfil', profile)
+    formData.append('plano', selectedPlan?.name || '')
+    formData.append('_subject', `Novo interesse: plano ${selectedPlan?.name || ''} (${profile})`)
+    formData.append('_template', 'table')
+    formData.append('_captcha', 'false')
+    try {
+      await fetch(LEAD_FORM_ENDPOINT, { method: 'POST', body: formData })
+      setLeadStatus('success')
+    } catch {
+      setLeadStatus('error')
+    }
+  }
+
   const scrollCarousel = (direction) => {
     const el = carouselRef.current
     if (!el) return
@@ -160,18 +275,76 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden">
       {/* Header */}
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${scrolled ? '-translate-y-full' : 'translate-y-0'} md:translate-y-0`}>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 bg-surface-deep/80 backdrop-blur-xl border-b border-white/5 transition-transform duration-300 ${
+          scrolled ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
         <div className="px-6 py-4 flex justify-between items-center">
           <Link to="/" className="text-3xl font-extrabold text-on-surface flex items-center gap-2">
             <img src={logoImg} alt="Diário Fit" className="w-12 h-12" />
-            Diário Fit
+            <span className="hidden sm:inline">Diário Fit</span>
           </Link>
+
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm font-semibold text-on-surface-variant hover:text-primary px-3 py-2 rounded-lg transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              to="/links"
+              className="hidden md:inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <span className="material-symbols-outlined !text-lg">link</span>
+              Links
+            </Link>
+            <button
+              onClick={() => setPanelModalOpen(true)}
+              className="hidden md:inline-flex items-center gap-2 text-sm font-bold text-on-surface bg-surface-container-high border border-white/10 px-4 py-2 rounded-lg hover:border-primary/50 transition-all"
+            >
+              <span className="material-symbols-outlined !text-lg">admin_panel_settings</span>
+              Acessar o Painel
+            </button>
+            <button
+              onClick={handlePlayStoreClick}
+              className="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold hover:scale-105 active:scale-95 transition-all duration-150 cyan-glow"
+            >
+              Baixar na Play Store
+            </button>
+          </div>
+        </div>
+
+        <div className="md:hidden flex gap-2 px-4 pb-3 overflow-x-auto no-scrollbar">
           <button
-            onClick={handlePlayStoreClick}
-            className="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold hover:scale-105 active:scale-95 transition-all duration-150 cyan-glow"
+            onClick={() => setPanelModalOpen(true)}
+            className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-on-primary bg-primary px-3 py-1.5 rounded-full"
           >
-            Baixar na Play Store
+            <span className="material-symbols-outlined !text-base">admin_panel_settings</span>
+            Acessar o Painel
           </button>
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="shrink-0 inline-flex items-center text-xs font-semibold text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full"
+            >
+              {link.label}
+            </a>
+          ))}
+          <Link
+            to="/links"
+            className="shrink-0 inline-flex items-center text-xs font-semibold text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full"
+          >
+            Links
+          </Link>
         </div>
       </nav>
 
@@ -217,6 +390,132 @@ export default function Home() {
         </div>
       </section>
 
+      {/* O App */}
+      <section className="py-24 md:py-32 relative overflow-hidden bg-surface-container-lowest/40" id="app">
+        <div className="absolute top-1/3 -left-32 w-96 h-96 bg-secondary/5 blur-[120px] rounded-full" />
+        <div className="px-6 relative max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">O App</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
+              Gratuito para você. <span className="text-primary">Integrado com a sua academia.</span>
+            </h2>
+            <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
+              O Diário Fit é 100% gratuito para usar como quiser. E se você treina em uma academia parceira, o seu
+              treino chega pronto — direto da ficha digital, sem papel.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
+            {appPillars.map((pillar) => (
+              <div
+                key={pillar.label}
+                className="bg-surface-container rounded-2xl border border-white/5 p-6 flex flex-col items-start gap-3 hover:border-primary/30 transition-colors"
+              >
+                <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined !text-2xl">{pillar.icon}</span>
+                </div>
+                <h4 className="font-bold text-on-surface">{pillar.label}</h4>
+                <p className="text-sm text-on-surface-variant leading-relaxed">{pillar.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={handlePlayStoreClick}
+              className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95 mx-auto"
+            >
+              <span className="material-symbols-outlined">play_arrow</span>
+              Baixar grátis na Play Store
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Para Negócios */}
+      <section className="py-24 md:py-32 relative overflow-hidden" id="negocios">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 blur-[140px] rounded-full" />
+        <div className="px-6 relative max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">
+                Para Academias &amp; Personal Trainers
+              </span>
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
+                Seu negócio, <span className="text-primary">digital e com a sua cara</span>
+              </h2>
+              <p className="text-on-surface-variant text-base mb-8">
+                Modernize sua academia ou consultoria com o painel do Diário Fit: controle os treinos dos alunos,
+                acompanhe a evolução de cada um e entregue um app com a marca do seu negócio.
+              </p>
+              <ul className="space-y-6 mb-10">
+                {businessFeatures.map((feature) => (
+                  <li key={feature.title} className="flex items-start gap-4">
+                    <div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <span className="material-symbols-outlined !text-2xl">{feature.icon}</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-on-surface mb-1">{feature.title}</h4>
+                      <p className="text-sm text-on-surface-variant leading-relaxed">{feature.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/painel"
+                className="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform active:scale-95"
+              >
+                Quero conhecer
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+            </div>
+
+            <div className="relative">
+              <div className="relative bg-surface-container-low rounded-3xl p-6 border border-white/5 overflow-hidden">
+                <div className="absolute inset-x-8 top-8 h-40 bg-primary/10 blur-[80px] rounded-full" />
+                <div className="relative space-y-4">
+                  <div className="bg-surface-container rounded-2xl border border-white/5 p-5">
+                    <div className="text-xs uppercase tracking-widest font-semibold text-on-surface-variant mb-3 font-label-caps">
+                      Painel — Visão geral
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <div className="text-2xl font-extrabold text-primary">248</div>
+                        <div className="text-[10px] uppercase tracking-wider text-on-surface-variant">Alunos</div>
+                      </div>
+                      <div>
+                        <div className="text-2xl font-extrabold text-primary">1.2k</div>
+                        <div className="text-[10px] uppercase tracking-wider text-on-surface-variant">Treinos</div>
+                      </div>
+                      <div>
+                        <div className="text-2xl font-extrabold text-primary">87%</div>
+                        <div className="text-[10px] uppercase tracking-wider text-on-surface-variant">Frequência</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-surface-container rounded-2xl border border-white/5 p-5">
+                      <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3">
+                        <span className="material-symbols-outlined !text-xl">fitness_center</span>
+                      </div>
+                      <div className="text-sm font-bold text-on-surface mb-1">Treino A</div>
+                      <div className="text-xs text-on-surface-variant">Enviado para 32 alunos</div>
+                    </div>
+                    <div className="bg-surface-container rounded-2xl border border-white/5 p-5">
+                      <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary mb-3">
+                        <span className="material-symbols-outlined !text-xl">palette</span>
+                      </div>
+                      <div className="text-sm font-bold text-on-surface mb-1">White label</div>
+                      <div className="text-xs text-on-surface-variant">App com a sua marca</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Plans */}
       <section className="py-24 md:py-32 relative overflow-hidden" id="planos">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-72 bg-primary/5 blur-[120px] rounded-full" />
@@ -224,10 +523,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Planos e Preços</span>
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
-              Escolha o que combina <span className="text-primary">com você</span>
+              Escolha o plano ideal para o <span className="text-primary">seu negócio</span>
             </h2>
             <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
-              Para atletas, academias e personal trainers. Use grátis ou escolha o plano ideal para o seu negócio.
+              Para academias e personal trainers. Escolha o plano que combina com o seu momento.
             </p>
           </div>
 
@@ -254,63 +553,24 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="max-w-2xl mx-auto mb-10 rounded-2xl border border-red-500/40 bg-red-500/10 p-5 flex items-start gap-4">
+            <span className="material-symbols-outlined text-red-400 !text-3xl shrink-0 mt-0.5">construction</span>
+            <div className="text-left">
+              <h4 className="font-bold text-red-300 mb-1">Ainda em desenvolvimento</h4>
+              <p className="text-sm text-red-200/80 leading-relaxed">
+                Esta parte ainda não está concluída. Os valores abaixo ainda não correspondem à realidade e podem
+                mudar a qualquer momento.
+              </p>
+            </div>
+          </div>
+
           <div className="text-center mb-12">
             <h3 className="text-2xl md:text-3xl font-extrabold mb-3">{copy.title}</h3>
             <p className="text-on-surface-variant max-w-2xl mx-auto">{copy.description}</p>
           </div>
 
-          {/* Individual content */}
-          {activeTab === 'improve' && (
-            <div className="max-w-4xl mx-auto">
-              <div className="relative overflow-hidden rounded-[2rem] border border-primary/30 bg-gradient-to-b from-surface-container-high to-surface-container-low p-8 md:p-14">
-                <div className="relative z-10 text-center mb-12">
-                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-on-primary bg-primary rounded-full px-4 py-1.5 mb-6">
-                    <span className="material-symbols-outlined !text-sm">verified</span>
-                    100% grátis para sempre
-                  </span>
-                  <h4 className="text-3xl md:text-4xl font-extrabold mb-4">Seu treino, do seu jeito</h4>
-                  <p className="text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-                    O Diário Fit foi feito para quem quer melhorar o treino por conta própria. Sem mensalidade, sem
-                    planilhas e sem complicação: você mesmo gerencia seus treinos, alimentação e evolução na palma da mão.
-                  </p>
-                </div>
-
-                <div className="relative z-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-                  {individualFeatures.map((feature) => (
-                    <div
-                      key={feature.label}
-                      className="bg-surface-container rounded-2xl border border-white/5 p-5 flex flex-col items-start gap-3 hover:border-primary/30 transition-colors"
-                    >
-                      <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                        <span className="material-symbols-outlined !text-2xl">{feature.icon}</span>
-                      </div>
-                      <h5 className="font-bold text-on-surface">{feature.label}</h5>
-                      <p className="text-sm text-on-surface-variant leading-relaxed">{feature.text}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <button
-                    onClick={handlePlayStoreClick}
-                    className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform active:scale-95"
-                  >
-                    <span className="material-symbols-outlined">play_arrow</span>
-                    Baixar grátis na Play Store
-                  </button>
-                  <a
-                    href="#funcionalidades"
-                    className="text-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
-                  >
-                    Conhecer o app
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Carousel */}
-          {activeTab !== 'improve' && loading && (
+          {loading && (
             <div className="flex gap-6 overflow-hidden">
               {[0, 1, 2].map((i) => (
                 <div key={i} className="min-w-[85%] sm:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]">
@@ -329,7 +589,7 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab !== 'improve' && error && !loading && (
+          {error && !loading && (
             <div className="max-w-lg mx-auto text-center bg-surface-container-low rounded-3xl border border-white/5 p-10">
               <span className="material-symbols-outlined !text-5xl text-primary mb-4">cloud_off</span>
               <h4 className="text-xl font-bold text-on-surface mb-2">Não foi possível carregar os planos</h4>
@@ -345,7 +605,7 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab !== 'improve' && !loading && !error && visiblePlans.length === 0 && (
+          {!loading && !error && visiblePlans.length === 0 && (
             <div className="max-w-lg mx-auto text-center bg-surface-container-low rounded-3xl border border-white/5 p-10">
               <span className="material-symbols-outlined !text-5xl text-primary mb-4">info</span>
               <h4 className="text-xl font-bold text-on-surface mb-2">Nenhum plano disponível</h4>
@@ -355,7 +615,7 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab !== 'improve' && !loading && !error && visiblePlans.length > 0 && (
+          {!loading && !error && visiblePlans.length > 0 && (
             <div className="relative">
               <div
                 ref={carouselRef}
@@ -437,10 +697,8 @@ export default function Home() {
                         </ul>
                       </div>
 
-                      <a
-                        href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Olá! Tenho interesse no plano ${plan.name} do Diário Fit.`)}`}
-                        target="_blank"
-                        rel="noopener"
+                      <button
+                        onClick={() => openPlanModal(plan)}
                         className={`w-full text-center px-6 py-3.5 rounded-xl font-bold text-base transition-all hover:scale-[1.02] active:scale-95 ${
                           isHighlight
                             ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
@@ -448,7 +706,7 @@ export default function Home() {
                         }`}
                       >
                         Quero este plano
-                      </a>
+                      </button>
                     </article>
                   )
                 })}
@@ -493,84 +751,92 @@ export default function Home() {
       </section>
 
       {/* Features Sections */}
-      <section className="py-24 md:py-32" id="funcionalidades">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-24">
+      <section className="py-10 md:py-14 bg-surface-container-low relative overflow-hidden" id="funcionalidades">
+        <div
+          className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/30 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-8">
             <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">Recursos</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3 mt-2 text-on-surface">
               Tudo o que você precisa em <span className="text-primary">um só app</span>
             </h2>
-            <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
+            <p className="text-on-surface-variant text-sm max-w-2xl mx-auto">
               Uma infraestrutura digital completa projetada para quem leva o treinamento a sério, eliminando a complexidade e focando em resultados.
             </p>
           </div>
-          <div className="space-y-32">
+          <div className="space-y-10">
             {/* Feature 1: Treinos */}
-            <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex flex-col lg:flex-row items-center gap-8">
               <div className="flex-1 order-2 lg:order-1">
-                <div className="inline-flex items-center gap-3 text-primary mb-6">
-                  <span className="material-symbols-outlined text-4xl">fitness_center</span>
-                  <span className="text-xs tracking-widest uppercase font-semibold font-label-caps">Performance</span>
+                <div className="inline-flex items-center gap-2 text-primary mb-3">
+                  <span className="material-symbols-outlined !text-3xl">fitness_center</span>
+                  <span className="text-[10px] tracking-widest uppercase font-semibold text-on-surface-variant font-label-caps">Performance</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-6">Treinos Inteligentes &amp; Adaptáveis</h3>
-                <p className="text-on-surface-variant text-base mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-on-surface">Treinos Inteligentes &amp; Adaptáveis</h3>
+                <p className="text-on-surface-variant text-sm mb-4">
                   Crie templates de treino personalizados (A-G), registre cada série com precisão e acompanhe seu volume total. Nosso sistema calcula calorias via METs para otimizar seu gasto energético diário.
                 </p>
-                <ul className="space-y-4">
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                <ul className="space-y-1.5">
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-primary">check_circle</span>
                     Registro de séries e repetições
                   </li>
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-primary">check_circle</span>
                     Cálculo automático de METs
                   </li>
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-primary">check_circle</span>
                     Histórico detalhado por exercício
                   </li>
                 </ul>
               </div>
               <div className="flex-1 order-1 lg:order-2">
-                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="absolute inset-x-8 top-8 h-40 bg-primary/10 blur-[80px] rounded-full" />
-                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
-                    <span className="material-symbols-outlined !text-[220px] text-primary/20">exercise</span>
+                <div className="relative bg-surface-container-high rounded-3xl p-3 border border-white/10 shadow-lg shadow-black/20">
+                  <div className="absolute inset-x-8 top-6 h-20 bg-primary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-40 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[110px] text-primary/20">exercise</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Feature 2: Nutrição */}
-            <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex flex-col lg:flex-row items-center gap-8">
               <div className="flex-1">
-                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="absolute inset-x-8 top-8 h-40 bg-secondary/10 blur-[80px] rounded-full" />
-                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
-                    <span className="material-symbols-outlined !text-[220px] text-secondary/20">restaurant</span>
+                <div className="relative bg-surface-container-high rounded-3xl p-3 border border-white/10 shadow-lg shadow-black/20">
+                  <div className="absolute inset-x-8 top-6 h-20 bg-secondary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-40 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[110px] text-secondary/20">restaurant</span>
                   </div>
                 </div>
               </div>
               <div className="flex-1">
-                <div className="inline-flex items-center gap-3 text-secondary mb-6">
-                  <span className="material-symbols-outlined text-4xl">nutrition</span>
-                  <span className="text-xs tracking-widest uppercase font-semibold font-label-caps">Nutrição</span>
+                <div className="inline-flex items-center gap-2 text-secondary mb-3">
+                  <span className="material-symbols-outlined !text-3xl">nutrition</span>
+                  <span className="text-[10px] tracking-widest uppercase font-semibold text-on-surface-variant font-label-caps">Nutrição</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-6">Nutrição de Precisão Clínica</h3>
-                <p className="text-on-surface-variant text-base mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-on-surface">Nutrição de Precisão Clínica</h3>
+                <p className="text-on-surface-variant text-sm mb-4">
                   Utilize a base oficial TACO para um controle rigoroso. Monitore seus macronutrientes em tempo real e ajuste sua dieta conforme seus objetivos de hipertrofia ou perda de gordura.
                 </p>
-                <ul className="space-y-4">
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-secondary">check_circle</span>
+                <ul className="space-y-1.5">
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-secondary">check_circle</span>
                     189+ alimentos cadastrados
                   </li>
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-secondary">check_circle</span>
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-secondary">check_circle</span>
                     Tracking de Macros em tempo real
                   </li>
-                  <li className="flex items-center gap-3 text-on-surface">
-                    <span className="material-symbols-outlined text-secondary">check_circle</span>
+                  <li className="flex items-center gap-2 text-sm text-on-surface">
+                    <span className="material-symbols-outlined !text-base text-secondary">check_circle</span>
                     Diário alimentar integrado
                   </li>
                 </ul>
@@ -578,36 +844,87 @@ export default function Home() {
             </div>
 
             {/* Feature 3: Gamificação */}
-            <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex flex-col lg:flex-row items-center gap-8">
               <div className="flex-1 order-2 lg:order-1">
-                <div className="inline-flex items-center gap-3 text-tertiary mb-6">
-                  <span className="material-symbols-outlined text-4xl">military_tech</span>
-                  <span className="text-xs tracking-widest uppercase font-semibold font-label-caps">Engagement</span>
+                <div className="inline-flex items-center gap-2 text-tertiary mb-3">
+                  <span className="material-symbols-outlined !text-3xl">military_tech</span>
+                  <span className="text-[10px] tracking-widest uppercase font-semibold text-on-surface-variant font-label-caps">Engagement</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-6">Evolução Gamificada</h3>
-                <p className="text-on-surface-variant text-base mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-on-surface">Evolução Gamificada</h3>
+                <p className="text-on-surface-variant text-sm mb-4">
                   Transforme sua jornada em um jogo. Ganhe XP por cada treino concluído, conquiste medalhas raras e suba no ranking da temporada para mostrar que você faz parte da elite.
                 </p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-surface-container p-4 rounded-xl border border-white/5">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-surface-container-high p-3 rounded-xl border border-white/10">
                     <div className="text-tertiary font-bold mb-1">Rank S</div>
                     <div className="text-xs text-on-surface-variant">Nível de Elite</div>
                   </div>
-                  <div className="bg-surface-container p-4 rounded-xl border border-white/5">
+                  <div className="bg-surface-container-high p-3 rounded-xl border border-white/10">
                     <div className="text-tertiary font-bold mb-1">Closed Beta</div>
                     <div className="text-xs text-on-surface-variant">Em testes</div>
                   </div>
                 </div>
               </div>
               <div className="flex-1 order-1 lg:order-2">
-                <div className="relative bg-surface-container-low rounded-3xl p-4 border border-white/5">
-                  <div className="absolute inset-x-8 top-8 h-40 bg-tertiary/10 blur-[80px] rounded-full" />
-                  <div className="relative bg-surface-container rounded-2xl h-80 flex items-center justify-center overflow-hidden">
-                    <span className="material-symbols-outlined !text-[220px] text-tertiary/20">emoji_events</span>
+                <div className="relative bg-surface-container-high rounded-3xl p-3 border border-white/10 shadow-lg shadow-black/20">
+                  <div className="absolute inset-x-8 top-6 h-20 bg-tertiary/10 blur-[80px] rounded-full" />
+                  <div className="relative bg-surface-container rounded-2xl h-40 flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined !text-[110px] text-tertiary/20">emoji_events</span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 md:py-32 bg-surface-container-lowest/40" id="faq">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-xs tracking-widest uppercase font-semibold text-primary font-label-caps">FAQ</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 mt-3">
+              Perguntas <span className="text-primary">frequentes</span>
+            </h2>
+            <p className="text-on-surface-variant text-base">As respostas que você procura, direto ao ponto.</p>
+          </div>
+
+          <div className="space-y-4">
+            {faqItems.map((item, index) => {
+              const isOpen = openFaq === index
+              return (
+                <div
+                  key={item.question}
+                  className={`rounded-2xl border bg-surface-container transition-colors ${
+                    isOpen ? 'border-primary/40' : 'border-white/5'
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between gap-4 text-left px-6 py-5"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-bold text-on-surface">{item.question}</span>
+                    <span
+                      className={`material-symbols-outlined text-primary shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    >
+                      expand_more
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="px-6 pb-6 text-sm text-on-surface-variant leading-relaxed">{item.answer}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -660,9 +977,10 @@ export default function Home() {
                   PLATAFORMA
                 </h4>
                 <ul className="space-y-4 text-sm text-on-surface-variant">
+                  <li><a href="#app" className="hover:text-primary transition-colors">O App</a></li>
                   <li><a href="#funcionalidades" className="hover:text-primary transition-colors">Funcionalidades</a></li>
                   <li><a href="#planos" className="hover:text-primary transition-colors">Planos</a></li>
-                  <li><a href="#" className="hover:text-primary transition-colors">TACO Database</a></li>
+                  <li><Link to="/painel" className="hover:text-primary transition-colors">Painel Diário Fit</Link></li>
                 </ul>
               </div>
               <div>
@@ -670,7 +988,8 @@ export default function Home() {
                   SUPORTE
                 </h4>
                 <ul className="space-y-4 text-sm text-on-surface-variant">
-                  <li><a href="#" className="hover:text-primary transition-colors">Ajuda</a></li>
+                  <li><a href="#faq" className="hover:text-primary transition-colors">FAQ</a></li>
+                  <li><Link to="/links" className="hover:text-primary transition-colors">Links</Link></li>
                   <li><Link to="/privacy" className="hover:text-primary transition-colors">Privacidade</Link></li>
                   <li><Link to="/terms" className="hover:text-primary transition-colors">Termos</Link></li>
                 </ul>
@@ -680,12 +999,31 @@ export default function Home() {
                   SOCIAL
                 </h4>
                 <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary/20 hover:text-primary transition-all">
-                    <span className="material-symbols-outlined text-xl">share</span>
-                  </a>
-                  <a href="#" className="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary/20 hover:text-primary transition-all">
+                  <a
+                    href="https://www.instagram.com/diariofit.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary/20 hover:text-primary transition-all"
+                  >
                     <span className="material-symbols-outlined text-xl">camera</span>
                   </a>
+                  <a
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                    className="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary/20 hover:text-primary transition-all"
+                  >
+                    <span className="material-symbols-outlined text-xl">chat</span>
+                  </a>
+                  <Link
+                    to="/links"
+                    aria-label="Links"
+                    className="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary/20 hover:text-primary transition-all"
+                  >
+                    <span className="material-symbols-outlined text-xl">link</span>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -699,6 +1037,186 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Acessar o Painel modal */}
+      {panelModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setPanelModalOpen(false)} />
+          <div className="relative bg-surface-container-high border border-white/10 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-black/40">
+            <div className="w-14 h-14 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-5">
+              <span className="material-symbols-outlined !text-3xl">construction</span>
+            </div>
+            <h3 className="text-2xl font-extrabold mb-2">Em breve!</h3>
+            <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
+              O acesso ao painel administrativo do Diário Fit está em desenvolvimento. Em breve você poderá entrar para
+              gerenciar seus alunos, treinos e a evolução de cada um.
+            </p>
+            <button
+              onClick={() => setPanelModalOpen(false)}
+              className="bg-primary text-on-primary w-full px-6 py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-95 transition-all"
+            >
+              Entendi
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Quero este plano modal */}
+      {planModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setPlanModalOpen(false)} />
+          <div className="relative bg-surface-container-high border border-white/10 rounded-3xl p-8 max-w-lg w-full shadow-2xl shadow-black/40 max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setPlanModalOpen(false)}
+              aria-label="Fechar"
+              className="absolute top-4 right-4 w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            {leadStatus === 'success' ? (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-5">
+                  <span className="material-symbols-outlined !text-3xl">check_circle</span>
+                </div>
+                <h3 className="text-2xl font-extrabold mb-2">Recebemos seu interesse!</h3>
+                <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
+                  Obrigado, {leadForm.name.split(' ')[0] || 'atleta'}! Anotamos seu contato no plano{' '}
+                  <strong className="text-on-surface">{selectedPlan?.name}</strong>. Em breve falaremos com você pelo
+                  WhatsApp.
+                </p>
+                <button
+                  onClick={() => setPlanModalOpen(false)}
+                  className="bg-primary text-on-primary w-full px-6 py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-95 transition-all"
+                >
+                  Fechar
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <span className="material-symbols-outlined !text-2xl">handshake</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-extrabold">Quero este plano</h3>
+                    <p className="text-xs text-on-surface-variant">
+                      Plano <strong className="text-primary">{selectedPlan?.name}</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleLeadSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="lead-name" className="block text-xs font-semibold text-on-surface-variant mb-1.5">
+                      Nome
+                    </label>
+                    <input
+                      id="lead-name"
+                      type="text"
+                      required
+                      value={leadForm.name}
+                      onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                      placeholder="Seu nome completo"
+                      className="w-full bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="lead-email" className="block text-xs font-semibold text-on-surface-variant mb-1.5">
+                      E-mail
+                    </label>
+                    <input
+                      id="lead-email"
+                      type="email"
+                      required
+                      value={leadForm.email}
+                      onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
+                      placeholder="voce@exemplo.com"
+                      className="w-full bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="lead-whatsapp" className="block text-xs font-semibold text-on-surface-variant mb-1.5">
+                      Telefone / WhatsApp
+                    </label>
+                    <input
+                      id="lead-whatsapp"
+                      type="tel"
+                      required
+                      value={leadForm.whatsapp}
+                      onChange={(e) => setLeadForm({ ...leadForm, whatsapp: e.target.value })}
+                      placeholder="(11) 99999-9999"
+                      className="w-full bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold text-on-surface-variant mb-1.5">Você é</span>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { key: 'academia', label: 'Sou Academia', icon: 'apartment' },
+                        { key: 'personal', label: 'Sou Personal Trainer', icon: 'person_pin_circle' },
+                      ].map((option) => {
+                        const isActive = leadForm.role === option.key
+                        return (
+                          <button
+                            key={option.key}
+                            type="button"
+                            onClick={() => setLeadForm({ ...leadForm, role: option.key })}
+                            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all ${
+                              isActive
+                                ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface border border-white/10'
+                            }`}
+                          >
+                            <span className="material-symbols-outlined !text-lg">{option.icon}</span>
+                            {option.label}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {leadStatus === 'error' && (
+                    <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3">
+                      Não foi possível enviar agora. Tente novamente ou fale direto com a gente pelo{' '}
+                      <a
+                        href={WHATSAPP_URL}
+                        target="_blank"
+                        rel="noopener"
+                        className="underline hover:text-red-300"
+                      >
+                        WhatsApp
+                      </a>
+                      .
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={leadStatus === 'submitting'}
+                    className="w-full bg-primary text-on-primary px-6 py-3.5 rounded-xl font-bold text-base flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-60 disabled:hover:scale-100"
+                  >
+                    {leadStatus === 'submitting' ? (
+                      <>
+                        <span className="material-symbols-outlined !text-lg animate-spin">progress_activity</span>
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined !text-lg">send</span>
+                        Enviar interesse
+                      </>
+                    )}
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
